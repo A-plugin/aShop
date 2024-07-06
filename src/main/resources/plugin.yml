@@ -1,0 +1,21 @@
+name: aShop
+version: '${version}'
+author: 아포칼립스
+main: org.aplugin.shop.Shop
+api-version: '1.21'
+depend: [Vault]
+commands:
+  open:
+    description: Open Shop GUI
+    permission-message: §f[§aaShop§f]§c권한이 없습니다!
+  아이템등록:
+    description: 아이템을 상점에 추가합니다.
+libraries:
+  - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0
+
+permissions:
+  ashop.*:
+    children:
+      - ashop.open
+      - ashop.item
+      - ashop.edit
