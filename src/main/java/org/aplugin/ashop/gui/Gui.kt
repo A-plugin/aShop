@@ -13,8 +13,9 @@ import org.bukkit.inventory.ItemStack
 
 class Gui {
     val shop= Shop.Instance!!
-    fun openS(pageNumber: Int = 1): Inventory {
-        val i = Bukkit.createInventory(null, 54, Component.text("상점 - 페이지 $pageNumber").color(TextColor.color(0xEEEDEB)).decorate(TextDecoration.BOLD))
+
+    fun openS(pageNum: Int = 1): Inventory {
+        val i = Bukkit.createInventory(null, 54, Component.text("상점 - 페이지 $pageNum").color(TextColor.color(0xEEEDEB)).decorate(TextDecoration.BOLD))
 
         val next = ItemStack(Material.LIME_STAINED_GLASS_PANE)
         val nextM = next.itemMeta
@@ -26,11 +27,22 @@ class Gui {
         beforeM.displayName(Component.text("이전").color(TextColor.color(0xFF6969)).decorate(TextDecoration.BOLD))
         before.itemMeta = beforeM
 
+        /*
+        val player =i.viewers as Player
+        if (player.hasPermission("ashop.edit")) {
+            val edit= ItemStack(Material.RED_STAINED_GLASS_PANE)
+            val editM=edit.itemMeta
+            editM.displayName(Component.text("아이템 배치 수정").color(TextColor.color(0xC80036)).decorate(TextDecoration.BOLD))
+            edit.itemMeta=editM
+            i.setItem(49,edit)
+        }
+         */
+
 
         i.setItem(53, next)
         i.setItem(45, before)
 
-        val page = shop.config.getConfigurationSection("page$pageNumber") ?: return i
+        val page = shop.config.getConfigurationSection("page$pageNum") ?: return i
         var slot = 0
         for (key in page.getKeys(false)) {
             if (slot >= 45) break
@@ -43,14 +55,12 @@ class Gui {
 
             val sellPrice = page.getInt("$key.price.sell")
             val buyPrice = page.getInt("$key.price.buy")
-            val author = page.getString("$key.author") ?: "Unknown"
 
             meta.displayName(Component.text(itemName).color(TextColor.color(0xFFFFFF)))
 
             val lore = mutableListOf(
-                Component.text("판매 가격: $sellPrice").color(TextColor.color(0x96C9F4)),
-                Component.text("구매 가격: $buyPrice").color(TextColor.color(0xFF6969)),
-                Component.text("등록자: $author").color(TextColor.color(0xAAAAAA))
+                Component.text("판매 하기[우클릭] $sellPrice$").color(TextColor.color(0x96C9F4)),
+                Component.text("구매 하기[좌클릭] ${buyPrice}$").color(TextColor.color(0xFF6969)),
             )
             meta.lore(lore)
 

@@ -7,14 +7,18 @@ import org.aplugin.ashop.Shop
 import org.aplugin.ashop.gui.Gui
 import org.bukkit.Bukkit
 import org.bukkit.Material
+import org.bukkit.OfflinePlayer
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
+import org.bukkit.inventory.ItemStack
 
 class Listeners:Listener {
     val shop=Shop.Instance!!
+    val eco= Shop.economy
+
     var iValue1=0
     var iValue2=0
 
@@ -23,6 +27,7 @@ class Listeners:Listener {
         val i= e.clickedInventory ?: return
         if (e.view.title.contains("상점")) {
             if (!i.type.equals(InventoryType.CHEST)) return
+            if (e.currentItem==null) return
             when {
                 e.currentItem?.type==Material.LIME_STAINED_GLASS_PANE -> {
                     val currentPage = e.view.title.substringAfterLast(" ").toIntOrNull() ?: return
@@ -42,7 +47,73 @@ class Listeners:Listener {
                 Bukkit.broadcast(Component.text("EDIT SHOP ITEM"))
             }
 
-
+            if (e.currentItem?.itemMeta?.hasLore()!!) {
+                val itemN= e.currentItem?.type?.name ?: return
+                if (e.click.isShiftClick) {
+                    if (e.click.isRightClick) {
+                        val item=Material.getMaterial(itemN) ?: Material.AIR
+                        if (e.whoClicked.inventory.contains(item,item.maxStackSize)){
+                            e.whoClicked.inventory.contents
+                                .filterNotNull()
+                                .find { it.type == item }
+                                ?.let { it.amount -= item.maxStackSize }
+                            e.whoClicked.sendMessage(
+                                "§f[§aaShop§f]"
+                                        + Component.text("아이템을 판매했습니다")
+                                    .color(TextColor.color(0x96C9F4))
+                                    .content()
+                            )
+                        } else  {
+                            e.whoClicked.sendMessage(
+                                "§f[§aaShop§f]"
+                                        + Component.text("아이템이 충분하지 않습니다!")
+                                    .color(TextColor.color(0x96C9F4))
+                                    .content()
+                            )
+                        }
+                    }
+                    if (e.click.isLeftClick) {
+                        val item=Material.getMaterial(itemN) ?: Material.AIR
+                        val itemMaxStack= item.maxStackSize
+                        e.whoClicked.inventory.addItem(ItemStack(item, itemMaxStack))
+                        e.whoClicked.sendMessage("§f[§aaShop§f]"
+                                +Component.text("아이템을 구매했습니다")
+                                    .color(TextColor.color(0xFF6969))
+                                    .content())
+                    }
+                } else {
+                    if (e.click.isRightClick) {
+                        val item=Material.getMaterial(itemN) ?: Material.AIR
+                        if (e.whoClicked.inventory.contains(item)){
+                            e.whoClicked.inventory.contents
+                                .filterNotNull()
+                                .find { it.type == item }
+                                ?.let { it.amount -= 1 }
+                            e.whoClicked.sendMessage(
+                                "§f[§aaShop§f]"
+                                        + Component.text("아이템을 판매했습니다")
+                                    .color(TextColor.color(0x96C9F4))
+                                    .content()
+                            )
+                        } else {
+                            e.whoClicked.sendMessage(
+                                "§f[§aaShop§f]"
+                                        + Component.text("아이템이 충분하지 않습니다!")
+                                    .color(TextColor.color(0x96C9F4))
+                                    .content()
+                            )
+                        }
+                    }
+                    if (e.click.isLeftClick) {
+                        val item=Material.getMaterial(itemN) ?: Material.AIR
+                        e.whoClicked.inventory.addItem(ItemStack(item))
+                        e.whoClicked.sendMessage("§f[§aaShop§f]"
+                                +Component.text("아이템을 구매했습니다")
+                                    .color(TextColor.color(0xFF6969))
+                                    .content())
+                    }
+                }
+            }
 
             e.isCancelled = true
         }
@@ -57,9 +128,10 @@ class Listeners:Listener {
                 shop.config.set("page$currentPage.$itemType.item", itemType)
                 shop.config.set("page$currentPage.$itemType.price.sell", iValue1)
                 shop.config.set("page$currentPage.$itemType.price.buy", iValue2)
-                shop.config.set("page$currentPage.$itemType.author", e.whoClicked.name)
                 shop.saveConfig()
                 e.whoClicked.closeInventory()
+
+                e.whoClicked.sendMessage("§f[§aaShop§f] §a아이템 등록됨: ${itemType}")
             }
             if (item.type.equals(Material.PAPER)) {
                 e.whoClicked.closeInventory()

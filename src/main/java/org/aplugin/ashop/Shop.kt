@@ -46,7 +46,7 @@ class Shop : JavaPlugin() {
 
     companion object {
         var Instance: Shop? = null
-        private var economy: Economy? = null
+        var economy: Economy? = null
     }
 
     override fun onDisable() {

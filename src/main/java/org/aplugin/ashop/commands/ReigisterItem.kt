@@ -29,14 +29,6 @@ class ReigisterItem:TabExecutor {
             )
             return true
         }
-        val i=Gui().openS(1)
-        if (p0.hasPermission("ashop.edit")) {
-            val edit= ItemStack(Material.RED_STAINED_GLASS_PANE)
-            val editM=edit.itemMeta
-            editM.displayName(Component.text("아이템 배치 수정").color(TextColor.color(0xC80036)).decorate(TextDecoration.BOLD))
-            edit.itemMeta=editM
-            i.setItem(49,edit)
-        }
         p0.openInventory(Gui().ItemS(p0))
         return true
     }
@@ -46,7 +38,7 @@ class ReigisterItem:TabExecutor {
         p1: Command,
         p2: String,
         p3: Array<out String>?
-    ): MutableList<String>? {
-        TODO("Not yet implemented")
+    ): MutableList<String> {
+        return mutableListOf()
     }
 }

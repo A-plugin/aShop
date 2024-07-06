@@ -1,7 +1,7 @@
 name: aShop
 version: '${version}'
 author: 아포칼립스
-main: org.aplugin.shop.Shop
+main: org.aplugin.ashop.Shop
 api-version: '1.21'
 depend: [Vault]
 commands:
