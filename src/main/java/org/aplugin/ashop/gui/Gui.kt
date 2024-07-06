@@ -61,6 +61,7 @@ class Gui {
             val lore = mutableListOf(
                 Component.text("판매 하기[우클릭] $sellPrice$").color(TextColor.color(0x96C9F4)),
                 Component.text("구매 하기[좌클릭] ${buyPrice}$").color(TextColor.color(0xFF6969)),
+                Component.text("쉬프트 클릭으로 아이템 한번에 구매/판매").color(TextColor.color(0x4ad5a))
             )
             meta.lore(lore)
 

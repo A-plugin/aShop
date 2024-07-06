@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.inventory.InventoryClickEvent
 import org.bukkit.event.inventory.InventoryType
+import org.bukkit.event.player.PlayerToggleSneakEvent
 import org.bukkit.inventory.ItemStack
 
 class Listeners:Listener {
@@ -111,6 +112,7 @@ class Listeners:Listener {
                                 +Component.text("아이템을 구매했습니다")
                                     .color(TextColor.color(0xFF6969))
                                     .content())
+
                     }
                 }
             }
@@ -175,4 +177,5 @@ class Listeners:Listener {
             pageN++
         }
     }
+
 }
