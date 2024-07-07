@@ -27,7 +27,7 @@ class ReigisterItem:TabExecutor {
                     .color(TextColor.color(255, 100, 100))
                     .decorate(TextDecoration.BOLD)
             )
-            return true
+            return false
         }
         p0.openInventory(Gui().ItemS(p0))
         return true

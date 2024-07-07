@@ -27,7 +27,7 @@ class OpenGUI:TabExecutor {
                 val editM=edit.itemMeta
                 editM.displayName(Component.text("아이템 배치 수정").color(TextColor.color(0xC80036)).decorate(TextDecoration.BOLD))
                 edit.itemMeta=editM
-                i.setItem(49,edit)
+                //i.setItem(49,edit)
             }
             p0.openInventory(i)
             return true

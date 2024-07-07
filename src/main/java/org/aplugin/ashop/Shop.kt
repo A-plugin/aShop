@@ -5,9 +5,10 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import net.milkbowl.vault.economy.Economy
 import org.aplugin.ashop.Listeners.Listeners
+import org.aplugin.ashop.System.PriceChange
 import org.aplugin.ashop.commands.OpenGUI
 import org.aplugin.ashop.commands.ReigisterItem
-import org.bukkit.plugin.RegisteredServiceProvider
+import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
 
 class Shop : JavaPlugin() {
@@ -31,6 +32,7 @@ class Shop : JavaPlugin() {
 
         //=====[Listener]=====
         server.pluginManager.registerEvents(Listeners(),this)
+        server.pluginManager.registerEvents(PriceChange(),this)
         //=====[Config]======
         saveConfig()
     }
@@ -39,9 +41,18 @@ class Shop : JavaPlugin() {
         if (server.pluginManager.getPlugin("Vault") == null) {
             return false
         }
-        val rsp: RegisteredServiceProvider<Economy> = server.servicesManager.getRegistration(Economy::class.java) ?: return false
+        val rsp = server.servicesManager.getRegistration(
+            Economy::class.java
+        )
+        if (rsp == null) {
+            return false
+        }
         economy = rsp.provider
-        return economy != null
+        return true
+    }
+
+    fun getEconomy(): Economy {
+        return economy!!
     }
 
     companion object {

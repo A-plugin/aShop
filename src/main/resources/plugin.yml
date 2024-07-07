@@ -11,7 +11,7 @@ commands:
     usage: /open
   아이템등록:
     description: 아이템을 상점에 추가합니다.
-    usage: /아이템등록
+    usage: 손에 아이템을 들고 /아이템등록 명령어를 실행하세요
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0
 

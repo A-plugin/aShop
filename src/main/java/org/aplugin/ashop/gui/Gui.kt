@@ -27,17 +27,6 @@ class Gui {
         beforeM.displayName(Component.text("이전").color(TextColor.color(0xFF6969)).decorate(TextDecoration.BOLD))
         before.itemMeta = beforeM
 
-        /*
-        val player =i.viewers as Player
-        if (player.hasPermission("ashop.edit")) {
-            val edit= ItemStack(Material.RED_STAINED_GLASS_PANE)
-            val editM=edit.itemMeta
-            editM.displayName(Component.text("아이템 배치 수정").color(TextColor.color(0xC80036)).decorate(TextDecoration.BOLD))
-            edit.itemMeta=editM
-            i.setItem(49,edit)
-        }
-         */
-
 
         i.setItem(53, next)
         i.setItem(45, before)
@@ -59,8 +48,8 @@ class Gui {
             meta.displayName(Component.text(itemName).color(TextColor.color(0xFFFFFF)))
 
             val lore = mutableListOf(
-                Component.text("판매 하기[우클릭] $sellPrice$").color(TextColor.color(0x96C9F4)),
                 Component.text("구매 하기[좌클릭] ${buyPrice}$").color(TextColor.color(0xFF6969)),
+                Component.text("판매 하기[우클릭] $sellPrice$").color(TextColor.color(0x96C9F4)),
                 Component.text("쉬프트 클릭으로 아이템 한번에 구매/판매").color(TextColor.color(0x4ad5a))
             )
             meta.lore(lore)
@@ -93,14 +82,21 @@ class Gui {
         confirmM.displayName(Component.text("확인").color(TextColor.color(0x50B498)).decorate(TextDecoration.BOLD))
         confirm.itemMeta=confirmM
 
+        val lore = mutableListOf(
+            Component.text("0$").color(TextColor.color(0xFAFFAF)),
+            Component.text("[우클릭: 가격 올리기] [좌클릭: 가격 내리기]").color(TextColor.color(0x4ad5a))
+        )
+
         val value1= ItemStack(Material.PAPER)
         val valueM1=value1.itemMeta
         valueM1.displayName(Component.text("판매 가격설정").color(TextColor.color(0x96C9F4)).decorate(TextDecoration.BOLD))
+        valueM1.lore(lore)
         value1.itemMeta=valueM1
 
         val value2= ItemStack(Material.PAPER)
         val valueM2=value2.itemMeta
         valueM2.displayName(Component.text("구매 가격설정").color(TextColor.color(0xFF6969)).decorate(TextDecoration.BOLD))
+        valueM2.lore(lore)
         value2.itemMeta=valueM2
 
 
@@ -109,28 +105,6 @@ class Gui {
         i.setItem(14,value1)
         i.setItem(31,confirm)
 
-        return i
-    }
-
-    fun sell(): Inventory {
-        val i=Bukkit.createInventory(null, InventoryType.ANVIL,Component.text("판매 가격 입력").color(TextColor.color(0xEEEDEB)).decorate(
-            TextDecoration.BOLD))
-        val paper= ItemStack(Material.PAPER)
-        val nextM=paper.itemMeta
-        nextM.displayName(Component.text("여기에 가격 입력").color(TextColor.color(0xFFFFFF)).decorate(TextDecoration.BOLD))
-        paper.itemMeta=nextM
-        i.setItem(0,paper)
-        return i
-    }
-
-    fun buy(): Inventory {
-        val i=Bukkit.createInventory(null, InventoryType.ANVIL,Component.text("구매 가격 입력").color(TextColor.color(0xEEEDEB)).decorate(
-            TextDecoration.BOLD))
-        val paper= ItemStack(Material.PAPER)
-        val nextM=paper.itemMeta
-        nextM.displayName(Component.text("여기에 가격 입력").color(TextColor.color(0xFFFFFF)).decorate(TextDecoration.BOLD))
-        paper.itemMeta=nextM
-        i.setItem(0,paper)
         return i
     }
 
