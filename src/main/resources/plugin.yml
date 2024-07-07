@@ -12,6 +12,8 @@ commands:
   아이템등록:
     description: 아이템을 상점에 추가합니다.
     usage: 손에 아이템을 들고 /아이템등록 명령어를 실행하세요
+  가격변동:
+    description: 가격 변동 관련 커맨드
 libraries:
   - org.jetbrains.kotlin:kotlin-stdlib-jdk8:2.0.0
 
@@ -21,3 +23,4 @@ permissions:
       - ashop.open
       - ashop.item
       - ashop.edit
+      - ashop.price

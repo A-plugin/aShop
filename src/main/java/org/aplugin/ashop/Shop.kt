@@ -7,6 +7,7 @@ import net.milkbowl.vault.economy.Economy
 import org.aplugin.ashop.Listeners.Listeners
 import org.aplugin.ashop.System.PriceChange
 import org.aplugin.ashop.commands.OpenGUI
+import org.aplugin.ashop.commands.Price
 import org.aplugin.ashop.commands.ReigisterItem
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -29,12 +30,15 @@ class Shop : JavaPlugin() {
         //=====[Commands]=====
         OpenGUI().OpenGUI(this)
         ReigisterItem().ReigisterItem(this)
+        Price().Price(this)
 
         //=====[Listener]=====
         server.pluginManager.registerEvents(Listeners(),this)
         server.pluginManager.registerEvents(PriceChange(),this)
         //=====[Config]======
         saveConfig()
+        //=====[Price]======
+        PriceChange().PriceC()
     }
 
     private fun setupEconomy(): Boolean {
