@@ -22,7 +22,7 @@ class PriceChange: Listener {
     val fndpg=Listeners().findPage()
     val lst=Listeners()
 
-    /*
+
     @EventHandler
     fun ClickEvent(e:InventoryClickEvent) {
         val i= e.clickedInventory ?: return
@@ -44,24 +44,22 @@ class PriceChange: Listener {
             }
 
             if (sellCount>=300) {
-                sellCount=0
-                SetPriceSell(item)
+                //SetPriceSell(item)
             }
             if (buyCount>=300) {
-                buyCount=0
-                SetPriceBuy(item)
+                //SetPriceBuy(item)
             }
 
             if (e.click.isShiftClick) {
                 if (e.click.isLeftClick) {
-                    buyCount+=10
+                    sellCount+=10
                 }
                 if (e.click.isRightClick) {
                     sellCount+=10
                 }
             } else {
                 if (e.click.isLeftClick) {
-                    buyCount++
+                    sellCount++
                 }
                 if (e.click.isRightClick) {
                     sellCount++
@@ -74,7 +72,59 @@ class PriceChange: Listener {
         }
     }
 
+    fun PriceC() {
+        var priceP = shop.config.getInt("PriceP")
+        var priceH= shop.config.getInt("PriceH")
+        var time = shop.config.getLong("PriceT")
 
+
+        if (shop.config.getBoolean("PriceC")) {
+            Bukkit.getScheduler().runTaskTimer(shop, Runnable {
+                priceP = shop.config.getInt("PriceP")
+                time = shop.config.getLong("PriceT")
+                priceH= shop.config.getInt("PriceH")
+                for (i in 0..1000) {
+                    val pageN = shop.config.getConfigurationSection("page$i") ?: continue
+                    for (key in pageN.getKeys(false)) {
+                        val itemName = pageN.getString("$key.item") ?: continue
+                        val material = Material.getMaterial(itemName) ?: continue
+
+                        val item = ItemStack(material)
+
+                        var sellPrice = pageN.getInt("$key.price.sell")
+                        var buyPrice = pageN.getInt("$key.price.buy")
+
+                        var sellCount = pageN.getInt("$key.count.sell")
+                        var buyCount = sellCount
+
+                        if (buyCount < priceH) {
+                            buyPrice = Math.round((buyPrice * (1 - (priceP / 100.0))).toFloat())
+                            sellPrice = Math.round((sellPrice * (1 + (priceP / 100.0))).toFloat())
+                        } else {
+                            buyCount=0
+                            sellCount=0
+                            buyPrice = Math.round((buyPrice * (1 + (priceP / 100.0))).toFloat())
+                            sellPrice = Math.round((sellPrice * (1 - (priceP / 100.0))).toFloat())
+                        }
+
+                        if (sellPrice<=0) sellPrice=0
+                        if (buyPrice<=0) buyPrice=0
+
+                        shop.config.set("page$i.$key.price.sell",sellPrice)
+                        shop.config.set("page$i.$key.price.buy",buyPrice)
+                        shop.config.set("page$i.$key.count.sell",sellCount)
+                        shop.config.set("page$i.$key.count.buy",buyCount)
+                        shop.saveConfig()
+                    }
+                }
+            }, time, time)
+        }
+    }
+
+
+
+    /*
+    안쓰는 코드
     fun SetPriceSell(item: ItemStack) {
         val itemType = item.type.name
         val sellPrice=shop.config.getInt("page${fndpg}.${item.type.name}.price.sell")
@@ -100,41 +150,5 @@ class PriceChange: Listener {
     }
 
      */
-
-    val priceP=shop.config.getInt("PriceP")
-    fun PriceC() {
-        if (shop.config.getBoolean("PriceC")) {
-            Bukkit.getScheduler().runTaskTimer(shop as JavaPlugin, Runnable {
-                for (i in 0..1000) {
-                    val pageN = shop.config.getConfigurationSection("page$i")!!
-                    for (key in pageN.getKeys(false)) {
-                        val itemName = pageN.getString("$key.item") ?: continue
-                        val material = Material.getMaterial(itemName) ?: continue
-
-                        val item = ItemStack(material)
-                        val meta = item.itemMeta
-
-                        var sellPrice = pageN.getInt("$key.price.sell")
-                        var buyPrice = pageN.getInt("$key.price.buy")
-
-                        var sellCount = pageN.getInt("$key.count.sell")
-                        var buyCount = pageN.getInt("$key.count.buy")
-
-                        if (sellCount <= 300 || buyCount <= 300) {
-                            buyPrice = Math.round(((buyPrice * (100 - priceP / 100)).toDouble())).toInt()
-                            sellPrice = Math.round((sellPrice * (100 + priceP / 100)).toDouble()).toInt()
-                        } else {
-                            buyPrice = Math.round(((buyPrice * (100 + priceP / 100)).toDouble())).toInt()
-                            sellPrice = Math.round((sellPrice * (100 - priceP / 100)).toDouble()).toInt()
-                        }
-
-                        shop.config.set("$key.price.sell", sellPrice)
-                        shop.config.set("$key.price.buy", buyPrice)
-                        shop.saveConfig()
-                    }
-                }
-            }, 18000L, 18000)
-        }
-    }
 
 }

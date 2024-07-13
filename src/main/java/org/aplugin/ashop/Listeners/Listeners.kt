@@ -246,6 +246,20 @@ class Listeners:Listener {
         }
     }
 
+    fun itemInPage(item: ItemStack):Int {
+        var pageN = 1
+        while (true) {
+            val page = shop.config.getConfigurationSection("page$pageN")
+            if (page != null) {
+                if (page.get(item.type.name)!=null) {
+                    return pageN
+                }
+            }
+            pageN++
+        }
+
+    }
+
     fun getPrice(item: ItemStack): Int? {
         val itemMeta = item.itemMeta ?: return null
         val lore = itemMeta.lore() ?: return null
